@@ -1,0 +1,17 @@
+package require tcltest
+namespace import ::tcltest::*
+
+source "day_1.tcl"
+test parse_input_one_element {
+	Test: +1 == [+1]
+} -body {
+	parse_input "+1"
+} -result [list "+1"]
+
+test parse_input_two_elements {
+	Test: +1 \n	-3 == [+1 -3]
+} -body {
+	parse_input "+1\n-3"
+} -result [list "+1" "-3"]
+
+cleanupTests
