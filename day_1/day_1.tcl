@@ -1,21 +1,12 @@
-proc load_input { filename } {
-	set fp [open $filename r]
-	set file_data [read $fp]
-	close $fp
-	return $file_data
-}
-
-proc parse_input { file_content} {
-	split $file_content "\n"
-}
+source [file join [file dirname [info script]] ../utils utils.tcl]
 
 set puzzle [load_input "input.txt"]
 
-set parsed [parse_input $puzzle]
 # part one
-
+set parsed [parse_input $puzzle]
 puts "result part1 [expr $parsed]"
 
+# part 2
 set frequencies [dict create]
 set freq_count [expr [llength $parsed]]
 
@@ -29,6 +20,6 @@ while {![dict exists $frequencies $sum]} {
 	 		set ctr 0
   	}
 }
- puts "result part2 $sum"
+puts "result part2 $sum"
 
 
