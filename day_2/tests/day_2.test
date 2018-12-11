@@ -1,7 +1,7 @@
 package require tcltest
 namespace import ::tcltest::*
 
-source day_2.tcl
+source "day_2.tcl"
 
 test has_double_returns_false_for_no_doubles {
 	Test: abcdef contains no duplicated letters
@@ -10,7 +10,9 @@ test has_double_returns_false_for_no_doubles {
 } -result 0
 
 test has_double_returns_true_for_a_double {
-	Test aabcdef contains one double
+	Test abbcdef contains one double
 } -body {
-	has_double aabcdef
+	has_double abbcdef
 } -result 1
+
+cleanupTests
