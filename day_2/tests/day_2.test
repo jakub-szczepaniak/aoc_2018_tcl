@@ -81,6 +81,31 @@ test count_triples_is_1_for_2 {
 	triples "aaabbbcde"
 } -result 1
 
+test levenhstein_identical {
+	0 for "aaaa" "aaaa"
+} -body {
+	levenhstein "aaaa" "aaaa"
+} -result 0
+
+test levenhstein_1_different {
+	1 for "aaba" "aaaa"
+} -body {
+	levenhstein "aaba" "aaaa"
+} -result 1
+
+test levenhstein_full_different {
+	4 for "abcd" "efgh"
+} -body {
+	levenhstein "abcd" "efgh"
+} -result 4
+
+test levenhstein_example_1_from_puzzle {
+	abcde and axcye should be 2
+} -body {
+	levenhstein abcde axcye
+} -result 2
+
+
 
 
 cleanupTests

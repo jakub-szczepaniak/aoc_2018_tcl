@@ -43,6 +43,30 @@ proc doubles { box_ids } {
  	return $count
  }
 
+proc string_to_list { input } {
+	return [split $input ""]
+}
+
+ proc levenhstein { input1 input2 } {
+ 	set distance 0
+ 	set count 0
+ 	set list1 [string_to_list $input1]
+	set list2 [string_to_list $input2]
+
+ 	set input_length [llength $list1]
+ 	
+ 	while { $count < $input_length} {
+ 		if { [lindex $list1 $count] ne [lindex $list2 $count]} {
+ 		 		incr distance
+ 			}
+ 		incr count
+ 	}
+ 	return $distance
+ }
+
+proc show_difference { input1 input2} {
+	puts "0"
+}
 
 
 set puzzle [load_input "input.txt"]
@@ -51,6 +75,21 @@ set parsed [parse_input $puzzle]
 
 set checksum [expr [doubles $parsed]*[triples $parsed]]
 puts $checksum
+
+
+set mapping_distances [dict create]
+
+foreach input1 $parsed {
+	foreach input2 $parsed {
+		set distance [levenhstein $input1 $input2]
+		if { $distance eq 1} {
+			puts "$input1:$input2"
+			show_difference $input1 $input2 
+		}
+	}
+}
+
+
 
 
 #puts $sorted 
