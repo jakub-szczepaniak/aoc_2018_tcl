@@ -15,10 +15,22 @@ test has_double_returns_true_for_a_double {
 	has_double abbcdef
 } -result 1
 
+test has_double_detects_double_if_there_are_more_than_one {
+  Test abbccbb should return true
+} -body {
+	has_double abbccbb
+} -result 1
+
 test has_triple_returns_false_for_no_tripple {
 	Test: abcdef has no three same in a row
 } -body {
 		has_triple abcdef
 } -result 0
+
+test has_triple_returns_true_for_three_consecutive {
+  Test: abbbcdef has one same in a row
+} -body {
+	has_triple abbbcdef
+} -result 1
 
 cleanupTests
