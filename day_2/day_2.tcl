@@ -64,8 +64,18 @@ proc string_to_list { input } {
  	return $distance
  }
 
-proc show_difference { input1 input2} {
-	puts "0"
+proc strip_difference { input1 input2} {
+	set list1 [string_to_list $input1]
+	set list2 [string_to_list $input2]
+	set diff_index -1
+	set counter 0
+	while { $counter < [llength $list1]} {
+		if {[lindex $list1 $counter] ne [lindex $list2 $counter]} {
+ 		 		set diff_index $counter
+ 			}
+ 		incr counter
+	} 
+	return $diff_index
 }
 
 
@@ -84,7 +94,7 @@ foreach input1 $parsed {
 		set distance [levenhstein $input1 $input2]
 		if { $distance eq 1} {
 			puts "$input1:$input2"
-			show_difference $input1 $input2 
+			puts [strip_difference $input1 $input2]
 		}
 	}
 }

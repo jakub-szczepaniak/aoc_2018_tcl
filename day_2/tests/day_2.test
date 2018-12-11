@@ -105,6 +105,12 @@ test levenhstein_example_1_from_puzzle {
 	levenhstein abcde axcye
 } -result 2
 
+test strip_difference {
+	abcde and abcde should return same string
+} -body {
+	strip_difference "abcde" "abcde"
+} -result -1
+
 
 
 
