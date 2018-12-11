@@ -11,6 +11,10 @@ proc has_double { box_id } {
 	return [expr [regexp -all (.)\\1 $box_id] eq 1]
 }
 
+proc has_triple { box_id } {
+ 	return 0
+}
+
 set puzzle [load_input "input.txt"]
 
 set parsed [parse_input $puzzle]

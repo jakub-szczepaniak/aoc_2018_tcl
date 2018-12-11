@@ -15,4 +15,10 @@ test has_double_returns_true_for_a_double {
 	has_double abbcdef
 } -result 1
 
+test has_triple_returns_false_for_no_tripple {
+	Test: abcdef has no three same in a row
+} -body {
+		has_triple abcdef
+} -result 0
+
 cleanupTests
