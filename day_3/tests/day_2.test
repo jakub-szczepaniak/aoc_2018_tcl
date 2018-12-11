@@ -1,6 +1,0 @@
-package require tcltest
-namespace import ::tcltest::*
-
-source "day_3.tcl"
-
-cleanupTests

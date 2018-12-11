@@ -1,0 +1,12 @@
+package require tcltest
+namespace import ::tcltest::*
+
+source "day_3.tcl"
+
+test getting_single_claim {
+	single claim is converted to dictionary
+} -body {
+	as_claim "#8 @ 972,677: 14x17"
+} -result {claim_id 8 x 972 y 677 w 14 h 17}
+
+cleanupTests
