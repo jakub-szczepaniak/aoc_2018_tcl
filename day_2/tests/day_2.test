@@ -63,4 +63,24 @@ test count_doubles_is_1_when_2 {
 	doubles "aabbcd"
 } -result 1
 
+test count_triples_is_0 {
+	Test "aabcd" should be 0
+} -body {
+	triples "aabcd"
+} -result 0
+
+test count_triples_is_1 {
+	"abbbcd" is 1
+} -body {
+	triples "abbbcd"
+} -result 1
+
+test count_triples_is_1_for_2 {
+	"aaabbbcde" is 1
+} -body {
+	triples "aaabbbcde"
+} -result 1
+
+
+
 cleanupTests

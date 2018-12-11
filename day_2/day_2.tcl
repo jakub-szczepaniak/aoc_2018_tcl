@@ -33,6 +33,15 @@ proc doubles { box_ids } {
 	}
 	return $count
 }
+ proc triples { box_ids } {
+ 	set count 0
+ 	foreach box_id $box_ids {
+ 		if {[has_triple $box_id]} {
+ 			incr count
+ 		}
+ 	}
+ 	return $count
+ }
 
 
 
@@ -40,6 +49,8 @@ set puzzle [load_input "input.txt"]
 
 set parsed [parse_input $puzzle]
 
+set checksum [expr [doubles $parsed]*[triples $parsed]]
+puts $checksum
 
 
 #puts $sorted 
