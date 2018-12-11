@@ -39,4 +39,10 @@ test has_triple_returns_true_when_there_are_more_than_one {
 	has_triple abbbcccdef
 } -result 1
 
+test count_occurences_in_string {
+	Test : abc should be { a 1 b 1 c 1}
+} -body {
+	occurences "abc"
+} -result [dict create a 1 b 1 c 1]
+
 cleanupTests
