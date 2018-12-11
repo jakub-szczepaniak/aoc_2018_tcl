@@ -5,11 +5,10 @@ proc sort_all_items { box_ids } {
 	foreach box_id $box_ids {
 		lappend result [join [lsort [split $box_id ""]]]
 	}
-	puts $result
 }
 
-proc has_double { sorted } {
-	return [expr [regexp -all "(?!:)(\w)\1" sorted] eq 2]
+proc has_double { box_id } {
+	return [expr [regexp -all (.)\\1 $box_id] eq 1]
 }
 
 set puzzle [load_input "input.txt"]
@@ -18,4 +17,4 @@ set parsed [parse_input $puzzle]
 
 set sorted [sort_all_items $parsed]
 
-puts $sorted 
+#puts $sorted 
