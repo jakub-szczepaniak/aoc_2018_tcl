@@ -45,4 +45,22 @@ test count_occurences_in_string {
 	occurences "abc"
 } -result [dict create a 1 b 1 c 1]
 
+test count_doubles_is_0 {
+	Test abc should be 0
+} -body {
+	doubles "abc"
+} -result 0
+
+test count_doubles_is_1_when_1 {
+	Test "aabc" should be 1
+} -body {
+	doubles "aabc"
+} -result 1
+
+test count_doubles_is_1_when_2 {
+	Test "aabbcd" should be 1
+} -body {
+	doubles "aabbcd"
+} -result 1
+
 cleanupTests
