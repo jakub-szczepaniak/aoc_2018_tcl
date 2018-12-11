@@ -1,0 +1,16 @@
+package require tcltest
+namespace import ::tcltest::*
+
+source day_2.tcl
+
+test has_double_returns_false_for_no_doubles {
+	Test: abcdef contains no duplicated letters
+} -body {
+	has_double abcdef
+} -result 0
+
+test has_double_returns_true_for_a_double {
+	Test aabcdef contains one double
+} -body {
+	has_double aabcdef
+} -result 1
