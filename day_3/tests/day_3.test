@@ -3,10 +3,18 @@ namespace import ::tcltest::*
 
 source "day_3.tcl"
 
+set expected_claim [dict create claim_id 1]
+
 test getting_single_claim {
 	single claim is converted to dictionary
 } -body {
 	as_claim "#8 @ 972,677: 14x17"
 } -result {claim_id 8 x 972 y 677 w 14 h 17}
+
+test calculate_covered_fields {
+	claim that starts 0, 0, with 1x1 covers one field, [0, 0]
+} -body {
+	list_covered [dict create claim_id 1 x 0 y 0 w 1 h 1]
+} -result [list "1:1"]
 
 cleanupTests

@@ -10,6 +10,9 @@ proc as_claim { line } {
 	dict append claim h $h
 	return $claim
 }
+proc list_covered { claim } {
+	
+}
 
 set input [load_input "input.txt"]
 
