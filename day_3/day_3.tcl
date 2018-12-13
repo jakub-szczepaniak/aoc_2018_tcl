@@ -11,7 +11,18 @@ proc as_claim { line } {
 	return $claim
 }
 proc list_covered { claim } {
+	set top_corner_x [dict get $claim x]
+	set top_corner_y [dict get $claim y]
+	set width [dict get $claim w]
+	set height [dict get $claim h]
+	set result [list]
 	
+	for {set counter_x $top_corner_x} { $counter_x < [expr $width+$top_corner_x]} {incr counter_x} {
+		for {set counter_y $top_corner_y} {$counter_y < [expr $height + $top_corner_y]} {incr counter_y} {
+		lappend result "$counter_x:$counter_y" 
+		}
+	}
+	return $result
 }
 
 set input [load_input "input.txt"]
