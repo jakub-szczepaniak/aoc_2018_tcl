@@ -24,7 +24,7 @@ proc list_covered { claim } {
 		lappend result "$counter_x:$counter_y"
 		}
 	}
-	return $result
+	set result
 }
 
 set input [load_input "input.txt"]
@@ -37,6 +37,7 @@ set fabric [dict create]
 
 foreach line $lines {
 	set current_claim [as_claim $line]
+	lappend claims [dict get $current_claim claim_id]
 	foreach covered [dict get $current_claim covered ] {
 		  dict lappend fabric $covered [dict get $current_claim claim_id]
 	}
@@ -50,4 +51,8 @@ foreach inch [dict values $fabric] {
 } 
 puts $result_1
 
-puts [dict get $fabric 130:466]
+set overlapping_claims [dict filter $fabric script { _ o_claims} { expr [llength $o_claims] > 1}]
+
+set unique [lsort -unique [flatten [dict values $overlapping_claims]]]
+
+puts [filter $claims {not_in $unique}]
