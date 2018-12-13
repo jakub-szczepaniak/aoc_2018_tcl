@@ -17,7 +17,11 @@ test calculate_covered_fields_single_fields {
 	list_covered [dict create claim_id 1 x 0 y 0 w 1 h 1]
 } -result [list "0:0"]
 
-
+test calculate_covered_fiels_single_row {
+	claim that starts 1 1 with 1x1 covers one field [1:1]
+} -body {
+	list_covered [dict create claim_id 2 x 1 y 1 w 1 h 1]
+} -result [list "1:1"]
 
 
 cleanupTests
