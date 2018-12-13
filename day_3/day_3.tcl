@@ -32,7 +32,22 @@ set input [load_input "input.txt"]
 set lines [parse_input $input]
 
 set claims [list]
+
+set fabric [dict create]
+
 foreach line $lines {
-	lappend claims [as_claim $line]
+	set current_claim [as_claim $line]
+	foreach covered [dict get $current_claim covered ] {
+		  dict lappend fabric $covered [dict get $current_claim claim_id]
+	}
 } 
-#puts $claims
+
+set result_1 0
+foreach inch [dict values $fabric] {
+	if {[expr [llength $inch] > 1]} {
+		incr result_1 
+	}
+} 
+puts $result_1
+
+puts [dict get $fabric 130:466]
