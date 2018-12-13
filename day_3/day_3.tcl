@@ -8,6 +8,8 @@ proc as_claim { line } {
 	dict append claim y $y
 	dict append claim w $w
 	dict append claim h $h
+	set covered_list [list_covered $claim]
+	dict append claim covered $covered_list
 	return $claim
 }
 proc list_covered { claim } {
