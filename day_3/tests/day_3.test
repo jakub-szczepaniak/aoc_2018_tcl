@@ -3,8 +3,6 @@ namespace import ::tcltest::*
 
 source "day_3.tcl"
 
-set expected_claim [dict create claim_id 1]
-
 test getting_single_claim {
 	single claim is converted to dictionary
 } -body {
