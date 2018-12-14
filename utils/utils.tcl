@@ -5,6 +5,12 @@ proc load_input { filename } {
 	return $file_data
 }
 
+proc save_output { filename content} {
+	set fp [open $filename w]
+	puts $fp $content
+	close $fp
+}
+
 proc parse_input { file_content} {
 	split $file_content "\n"
 }
