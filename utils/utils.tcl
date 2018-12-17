@@ -24,3 +24,5 @@ proc filter {list script} {
 proc not_in {list element} { expr { [lsearch -exact $list $element]==-1}}
 
 proc flatten {list} { concat {*}$list }
+
+proc to_int { sequence } { return [scan $sequence %d]}
