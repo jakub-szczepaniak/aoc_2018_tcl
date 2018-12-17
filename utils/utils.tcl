@@ -26,3 +26,19 @@ proc not_in {list element} { expr { [lsearch -exact $list $element]==-1}}
 proc flatten {list} { concat {*}$list }
 
 proc to_int { sequence } { return [scan $sequence %d]}
+
+proc range { element times} {
+	set result [list]
+	for { set x 0 } { [expr $x <= $times] } {incr x} { lappend result $element}
+	return $result
+}
+
+proc max { list } {
+	set max [lindex $list 0]
+	foreach element $list {
+		if {$max < $element} {
+			set $max $element
+		}
+		return $max
+	}
+}

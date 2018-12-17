@@ -42,7 +42,6 @@ dict for {guard_id commands} $entries_by_guard  {
 	
 }
 
-puts $times_by_guard
 
 set max_time 0
 set max_guard 0
@@ -55,4 +54,18 @@ dict for { guard_id time_slept} $times_by_guard {
 }
 
 puts $max_guard
-puts [dict get $entries_by_guard $max_guard]
+set entries_max_guard [dict get $entries_by_guard $max_guard]
+
+set minutes [dict create]
+
+for { set x 0 } { $x < 60} { incr x} {
+	dict append minutes $x 0
+}
+
+foreach { start end } $entries_max_guard {
+	for { set x [lindex $start 1]} { $x <= [lindex $end 1] } { incr x} {
+		dict incr minutes $x
+	}
+}
+
+puts $minutes
