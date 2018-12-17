@@ -11,7 +11,6 @@ save_output "sorted.txt" $sorted
 set entries_by_guard [dict create]
 set current_guard_id 0
 foreach log_entry $sorted {
-	puts $log_entry
 	switch -regexp -matchvar groups -- $log_entry {
 		"Guard #(\\d+?) begins shift" { 
 			set current_guard_id [lindex $groups 1]
@@ -29,19 +28,31 @@ foreach log_entry $sorted {
 		default { puts "Parsing didnt match"}				
 		}
 	}
-	puts $entries_by_guard
 
 set times_by_guard [dict create ]
 
 dict for {guard_id commands} $entries_by_guard  {
-	puts $guard_id
 	set time_slept 0
 	foreach {start_command end_command} $commands {
 		set start_time [lindex $start_command 1]
 		set end_time [lindex $end_command 1]
 		set time_slept [expr ($end_time - $start_time)]
 	}
-	puts $time_slept
+	dict append times_by_guard $guard_id $time_slept
 	
 }
 
+puts $times_by_guard
+
+set max_time 0
+set max_guard 0
+
+dict for { guard_id time_slept} $times_by_guard {
+	if { [expr $max_time < $time_slept ]} {
+		set max_time $time_slept
+		set max_guard $guard_id
+	}
+}
+
+puts $max_guard
+puts [dict get $entries_by_guard $max_guard]
