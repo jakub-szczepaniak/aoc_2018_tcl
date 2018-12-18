@@ -1,6 +1,21 @@
 source [file join [file dirname [info script]] ../utils utils.tcl]
 
 
+proc parse_command { line } {
+	switch -regexp -matchvar groups -- $line {
+		"Guard #(\\d+?) begins shift" {
+			return [list guard_id [lindex $groups 1]]
+			set command [lindex $groups 1]
+		}
+		"\\[.+?:(\\d{2})\\] falls asleep" {
+			return [list asleep [to_int [lindex $groups 1]]]
+		}
+		"\\[.+?:(\\d{2})\\] wakes up" {
+			return [list awake [to_int [lindex $groups 1]]]	
+		}
+	}
+}
+
 set puzzle [load_input "input.txt"]
 
 set parsed [parse_input $puzzle]
@@ -11,6 +26,7 @@ save_output "sorted.txt" $sorted
 set entries_by_guard [dict create]
 set current_guard_id 0
 foreach log_entry $sorted {
+	set command [parse_command $log_entry]
 	switch -regexp -matchvar groups -- $log_entry {
 		"Guard #(\\d+?) begins shift" { 
 			set current_guard_id [lindex $groups 1]
@@ -39,22 +55,10 @@ dict for {guard_id commands} $entries_by_guard  {
 		set time_slept [expr ($end_time - $start_time)]
 	}
 	dict append times_by_guard $guard_id $time_slept
-	
-}
-
-set max_time 0
-set max_guard 0
-
-dict for { guard_id time_slept} $times_by_guard {
-	if { [expr $max_time < $time_slept ]} {
-		set max_time $time_slept
-		set max_guard $guard_id
-	}
 }
 
 set max_guard [max_value_key $times_by_guard]
 puts "Guard id : $max_guard"
-
 
 set entries_max_guard [dict get $entries_by_guard $max_guard]
 
