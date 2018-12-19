@@ -19,4 +19,6 @@ test parsing_input_for_minute_awake {
 } -body { parse_command "\[1518-11-01 00:25] wakes up
 "} -result [list awake 25]
 
+
+
 cleanupTests

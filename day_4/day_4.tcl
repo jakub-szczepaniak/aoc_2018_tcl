@@ -16,14 +16,23 @@ proc parse_command { line } {
 	}
 }
 
-set puzzle [load_input "input.txt"]
+proc fill_in_0 { dictionary } {
+	for { set x 0} { $x < 60} { incr x} {
+		dict set dictionary $x 0
+	}
+	return $dictionary
+}
 
+set puzzle [load_input "input.txt"]
+#set puzzle [load_input "test.txt"]
 set parsed [parse_input $puzzle]
 
 set sorted [lsort $parsed]
 save_output "sorted.txt" $sorted
 
 set time_by_guard [dict create]
+set minutes [dict create]
+set minutes_by_guard [dict create]
 
 set current_guard_id 0
 foreach log_entry $sorted {
@@ -32,6 +41,7 @@ foreach log_entry $sorted {
 	switch [lindex $command 0] {
 		 "guard_id" {
 			set current_guard_id [lindex $command 1]
+			set minutes [ fill_in_0 $minutes ]
 		}
 		"asleep" {
 			set start_minute [lindex $command 1] 
@@ -39,15 +49,32 @@ foreach log_entry $sorted {
 		"awake" {
 			set end_minute [lindex $command 1]
 			set time_slept [expr $end_minute - $start_minute]
-			if {[dict exists time_by_guard $current_guard_id]} {
-					set curr_time [dict get time_by_guard $current_guard_id]
-					dict set time_by_guard $current_guard_id [expr $time_slept + $curr_time] 
-				} else {
-				dict set time_by_guard $current_guard_id $time_slept
+			for { set x $start_minute } { $x < $end_minute } { incr x} {
+				dict incr minutes $x
 			}
+			dict incr time_by_guard $current_guard_id $time_slept
+
+			dict lappend minutes_by_guard $current_guard_id [list $minutes]
 		}
 	}
+	puts $time_by_guard
 	
 	}
-puts [max_value_key $time_by_guard]
+
+set lazy_guard_id [max_value_key $time_by_guard]
+puts $lazy_guard_id
+puts [dict get $time_by_guard $lazy_guard_id]
+puts ----
+set lazy_minutes [flatten [dict get $minutes_by_guard $lazy_guard_id]]
+
+set total_minutes [fill_in_0 [dict create]]
+
+foreach minutes $lazy_minutes {
+	dict for { key value } $minutes {
+		dict inc total_minutes $key $value
+	}
+}
+puts [max_value_key $total_minutes]
+
+puts [expr $lazy_guard_id * [max_value_key $total_minutes]]
 
