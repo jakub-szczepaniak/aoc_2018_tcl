@@ -42,3 +42,15 @@ proc max { list } {
 		return $max
 	}
 }
+
+proc max_value_key { dictionary } {
+	set max [lindex [dict values $dictionary] 0]
+	set max_key 0
+	dict for {key value} $dictionary {
+		if { $value > $max  } {
+			set max $value
+			set max_key $key
+		}
+	}
+	return $max_key
+}
