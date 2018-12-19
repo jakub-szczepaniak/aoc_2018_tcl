@@ -57,14 +57,12 @@ foreach log_entry $sorted {
 			dict lappend minutes_by_guard $current_guard_id [list $minutes]
 		}
 	}
-	puts $time_by_guard
 	
-	}
+}
+
+#puts $minutes_by_guard
 
 set lazy_guard_id [max_value_key $time_by_guard]
-puts $lazy_guard_id
-puts [dict get $time_by_guard $lazy_guard_id]
-puts ----
 set lazy_minutes [flatten [dict get $minutes_by_guard $lazy_guard_id]]
 
 set total_minutes [fill_in_0 [dict create]]
@@ -74,7 +72,19 @@ foreach minutes $lazy_minutes {
 		dict inc total_minutes $key $value
 	}
 }
-puts [max_value_key $total_minutes]
 
-puts [expr $lazy_guard_id * [max_value_key $total_minutes]]
+puts "Part 1 [expr $lazy_guard_id * [max_value_key $total_minutes]] "
+
+dict for { guard_id days } $minutes_by_guard {
+	set minutes [fill_in_0 [dict create]]
+	foreach day [flatten $days] {
+		#puts $minute
+		foreach { minute state} $day {
+		dict incr minutes $minute $state
+		}
+	} 
+	puts "$guard_id : minute: [max_value_key $minutes], sleeps: [dict get $minutes [max_value_key $minutes]]"
+
+}
+puts [expr 449*36]
 
