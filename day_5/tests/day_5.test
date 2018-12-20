@@ -3,4 +3,10 @@ namespace import ::tcltest::*
 
 source "day_5.tcl"
 
+test react_returns_false_when_elements_cannot_react {
+  can_react a a == false
+} -body {
+  can_react A A
+} -result false
+
 cleanupTests
