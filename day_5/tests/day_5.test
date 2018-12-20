@@ -3,10 +3,40 @@ namespace import ::tcltest::*
 
 source "day_5.tcl"
 
-test react_returns_false_when_elements_cannot_react {
+test react_returns_sample_output_1 {
+  react [list a A]
+} -body {
+  react [list a A]
+} -result [list]
+
+test react_returns_sample_output_2 {
+  react [list a b B A]
+} -body {
+  react [list a b B A]
+} -result [list a A]
+
+test react_returns_sample_output_3 {
+  react [list a a b A A B]
+} -body {
+  react [list a a b A A B]
+} -result [list a a b A A B]
+
+test true_when_elements_can_react {
+  can_react a A == true
+} -body {
+  can_react a A
+} -result true
+
+test true_when_elements_can_react_2 {
+  can_react A a == true
+} -body {
+  can_react A a
+} -result true
+
+test false_when_elements_cannot_react_2 {
   can_react a a == false
 } -body {
-  can_react A A
+  can_react a a
 } -result false
 
 cleanupTests
