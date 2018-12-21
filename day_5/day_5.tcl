@@ -22,14 +22,36 @@ proc resolve_reaction { elements } {
 			reactor push $element
 		}
 	}
-	return [reactor peek [reactor size]]
+	set result [reactor peek [reactor size]] 
+	reactor destroy
+	return $result
 }
 
 set puzzle_input [load_input "input.txt"]
 
 set as_list [split $puzzle_input ""]
 
-set result [resolve_reaction $as_list]
+set part_1 [resolve_reaction $as_list]
 
-puts [llength $result]
+puts [llength $part_1]
+# ======
+set part_2_input [join $part_1 ""]
+
+set alphabet [list a b c d e f g h i j k l m n o p r q s t u v x y z]
+puts [llength $alphabet]
+set minimum [llength $part_1]
+puts "current minimum $minimum"
+foreach letter $alphabet {
+	set regex "(?i)($letter)"
+	set without_one [regsub -all -- $regex $part_2_input ""]
+	set without_one [split $without_one ""]
+	puts "length without $letter : [llength $without_one]"
+	set current [llength [resolve_reaction $without_one]] 
+	if { $current <= $minimum } {
+		set minimum $current
+		puts "new min: $current"
+	}
+}
+
+puts $minimum
 
