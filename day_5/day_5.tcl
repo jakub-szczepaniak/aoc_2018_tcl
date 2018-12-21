@@ -1,17 +1,5 @@
 source [file join [file dirname [info script]] ../utils utils.tcl]
-
-
-proc react { polymer } {
-	set result $polymer
-	for { set x 0} { $x < [llength $polymer]-1} {incr x} {
-		set current [lindex $polymer $x]
-		set next [lindex $polymer [expr $x + 1]]
-		if {[can_react $current $next]} { 
-			set result [lreplace $polymer $x [expr $x + 1]]
-		}
-	}
-	return $result
-}
+package require struct
 
 proc can_react { elem1 elem2} {
 	if {$elem1 == $elem2} { return false}
@@ -19,21 +7,29 @@ proc can_react { elem1 elem2} {
 	return false
 }
 
+proc resolve_reaction { elements } {
+	::struct::stack reactor
+
+	foreach element $elements {
+		if {[reactor size] == 0 } {
+			reactor push $element
+			continue
+		}
+		set existing [reactor peek]
+		if { [can_react $existing $element]} {
+			reactor pop
+		} else {
+			reactor push $element
+		}
+	}
+	return [reactor peek [reactor size]]
+}
+
 set puzzle_input [load_input "input.txt"]
 
 set as_list [split $puzzle_input ""]
 
-set as_list [list d a b A c C a C B A c C c a D A]
+set result [resolve_reaction $as_list]
 
-#puts $as_list
-
-set output [list]
- while { [llength $output] != [llength $as_list]} {
-  	set output $as_list
-  	set as_list [react $as_list]
-  	puts "current legth [llength $output]"
- }
-
-puts $output
-puts [llength $output]
+puts [llength $result]
 
