@@ -30,7 +30,6 @@ proc manhattan_dist { x1 y1 x2 y2 } {
 	return [expr {abs($x2-$x1) + abs($y2-$y1)}]
 }
 
-#set puzzle_input [load_input "input.txt"]
 set puzzle_input {1, 1
 1, 6
 8, 3
@@ -38,14 +37,12 @@ set puzzle_input {1, 1
 5, 5
 8, 9}
 
+set puzzle_input [load_input "input.txt"]
 set coordinates [parse_coordinates $puzzle_input]
 
-puts [min_max_coordinates $coordinates]
 set min_max [min_max_coordinates $coordinates]
-puts $coordinates
 
 set distances [dict create]
-
 
 for {set dx [lindex $min_max 0]} { $dx < [lindex $min_max 2] } {incr dx} {
 	for {set dy [lindex $min_max 1]} { $dy < [lindex $min_max 3] } {incr dy} {
@@ -58,10 +55,27 @@ for {set dx [lindex $min_max 0]} { $dx < [lindex $min_max 2] } {incr dx} {
 					if {$current > $distance} {
 						dict set distances "$dx:$dy" [list $id $distance]
 					}
-					if {$current == $distance} { dict set distances $"$dx:$dy" [list "." $distance] }
+					if {$current == $distance} { dict set distances "$dx:$dy" [list "." $distance] }
 				}
 			}
 	}
 }
 
-puts $distances
+set areas [dict create]
+set infinite [list]
+dict for { key value } $distances {
+	set field_id [lindex $value 0]
+	lassign [split $key ":"] x y
+	lassign $min_max min_x min_y max_x max_y
+	if { $x == $min_x || $x == $max_x - 1 || $y == $max_y -1 || $y == $min_y} {
+		lappend infinite $field_id
+	}
+	dict incr areas $field_id
+}
+
+
+foreach inf [lsort -unique $infinite] {
+	dict unset areas $inf
+}
+puts "part 1 : [dict get $areas [max_value_key $areas]]"
+
