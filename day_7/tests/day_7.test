@@ -3,5 +3,29 @@ namespace import ::tcltest::*
 
 source "day_7.tcl"
 
+test all_items_contained {
+	all returns true when list1 is in list2
+}	-body {
+		all_in [list a b] [list a b]
+	} -result true
+
+test all_items_not_contained {
+	all returns false when list1 is not in list2
+} -body {
+	all_in [list a b] [list c d]
+} -result false
+
+test all_items_contain_false_when_some_not_contained {
+	all retursn false when one part of list1 is not in list2
+} -body {
+	all_in [list a b ] [list b c]
+} -result false
+
+test all_in_when_list_in {
+	all_in returns true when whole list1 in list2
+} -body {
+	all_in [list a] [list a b]
+} -result true
+
 
 cleanupTests
