@@ -10,28 +10,48 @@ proc all_in { list1 list2 } {
 		}
 	}
 	return $result
-	
 }
+
+proc succesors_for { predecessor } {
+	global successors
+	return [dict get $successors $predecessor]
+}
+
+proc add_successor_for { predecessor successor} {
+	global successors
+	dict lappend successors $predecessor $successor
+}
+
+proc predecessors_for { successor } {
+	global predecessors
+	return [dict get $predecessors $successor]
+}
+
+proc add_predecessor_for { successor predecessor} {
+	global predecessors
+	dict lappend predecessors $successor $predecessor
+}
+
 
 set puzzle_input [parse_input [load_input "input.txt"]]
 
-set pred_2_succ [dict create]
-set succ_2_pred [dict create]
+set successors [dict create]
+set predecessors [dict create]
 
 set steps [list]
 foreach step $puzzle_input {
 	scan $step "Step %s must be finished before step %s" pred succ
-	dict lappend pred_2_succ $pred $succ
-	dict lappend succ_2_pred $succ $pred
+	add_successor_for $pred $succ
+	add_predecessor_for $succ $pred
 } 
 
-puts [dict keys $pred_2_succ]
-puts [dict keys $succ_2_pred]
+puts [dict keys $successors]
+puts [dict keys $predecessors]
 
 ::struct::prioqueue -ascii processing
 
-foreach element [dict keys $pred_2_succ] {
-	if { [not_in [dict keys $succ_2_pred] $element ]} {
+foreach element [dict keys $predecessors] {
+	if { [not_in [dict keys $successors] $element ]} {
 		processing put $element $element
 	}
 }
@@ -41,19 +61,6 @@ puts [processing peek]
 set finished [list]
 
 while { [processing size]} {
-	set next_item [processing get]
-	puts $next_item
-	lappend finished $next_item
-	set successors [dict get $pred_2_succ $next_item]
-	puts "successors for $next_item : $successors"
-	foreach successor $successors {
-		set preds [dict get $succ_2_pred $successor]
-		puts "predecessor for $successor: $preds"
-		if { [not_in $finished $successor] && [all_in $preds $finished] } {
-			puts "adding $successor"
-			processing put $successor $successor
-		} 
-	}
 }
 puts $finished
 	
