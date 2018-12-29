@@ -68,14 +68,11 @@ foreach step $puzzle_input {
 	add_predecessor_for $succ $pred
 } 
 
-puts [lsort [dict keys $successors]]
-puts [lsort [dict keys $predecessors]]
 
 prepare_queue
 
 foreach element [dict keys $successors] {
 	if { [not_in [dict keys $predecessors] $element ]} {
-		puts $element
 		queue_push $element
 	}
 }
@@ -83,13 +80,21 @@ foreach element [dict keys $successors] {
 set finished [list]
 
 while {[queue_size]} {
-	set next_action [queue_peek]
-	if { [all_in [ predecessors_for $next_action] $finished] } {
-		lappend $finished [queue_pop]
-		continue
+	set next_item [queue_pop]
+	lappend finished $next_item
+	if { ![dict exists $successors $next_item]} {
+		break
 	}
-	break
+	foreach successor [successors_for $next_item] {
+		if {[dict exists $predecessors $successor]} {
+			set current_pred [predecessors_for $successor]
+			if { !($successor in $finished) && [all_in $current_pred $finished]} {
+				queue_push $successor
+			}
+		}
+	}
+	
 }
-puts $finished
+puts  "Part 1: [join $finished {}]"
 	
 
