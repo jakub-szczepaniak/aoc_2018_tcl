@@ -17,6 +17,11 @@ proc successors_for { predecessor } {
 	return [dict get $successors $predecessor]
 }
 
+proc has_successors { predecessor } {
+	global successors
+	return [dict exists $successors $predecessor]
+}
+
 proc add_successor_for { predecessor successor} {
 	global successors
 	dict lappend successors $predecessor $successor
@@ -34,6 +39,10 @@ proc add_predecessor_for { successor predecessor} {
 
 proc prepare_queue {} { 
 	::struct::prioqueue -ascii processing
+}
+
+proc reset_queue {} {
+	processing clear
 }
 
 proc queue_push { element } {
@@ -56,6 +65,21 @@ proc destroy_queue {} {
 	processing destroy
 }
 
+proc prepare_worker { name } {
+	return [dict create id $name working_for 0 task {} done false]
+}
+
+proc is_busy { worker } {
+	return [dict get $worker working_for] > 0
+}
+
+proc set_task { worker task} {
+	dict set worker task $task
+	dict set worker working_for [expr [scan $task "%c"] + 60 - 65]
+	return $worker
+}
+#-----------------
+
 set puzzle_input [parse_input [load_input "input.txt"]]
 
 set successors [dict create]
@@ -67,7 +91,6 @@ foreach step $puzzle_input {
 	add_successor_for $pred $succ
 	add_predecessor_for $succ $pred
 } 
-
 
 prepare_queue
 
@@ -82,19 +105,38 @@ set finished [list]
 while {[queue_size]} {
 	set next_item [queue_pop]
 	lappend finished $next_item
-	if { ![dict exists $successors $next_item]} {
+	if { ![has_successors $next_item]} {
 		break
 	}
 	foreach successor [successors_for $next_item] {
-		if {[dict exists $predecessors $successor]} {
-			set current_pred [predecessors_for $successor]
-			if { !($successor in $finished) && [all_in $current_pred $finished]} {
+			if {!($successor in $finished) && [all_in [predecessors_for $successor] $finished]} {
 				queue_push $successor
-			}
 		}
 	}
 	
 }
 puts  "Part 1: [join $finished {}]"
 	
+reset_queue
+
+set part_2 [list]
+
+foreach element [dict keys $successors] {
+	if { [not_in [dict keys $predecessors] $element ]} {
+		queue_push $element
+	}
+}
+puts [queue_size]
+
+set workers [list]
+
+for {set x 0 } { $x < 5} { incr x} {
+	lappend workers [prepare_worker $x]
+}
+puts $workers
+set my_worker [prepare_worker 1]
+set my_worker [set_task $my_worker "D"]
+puts [expr [dict get $my_worker working_for] > 0]
+
+
 
