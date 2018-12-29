@@ -78,6 +78,14 @@ proc set_task { worker task} {
 	dict set worker working_for [expr [scan $task "%c"] + 60 - 65]
 	return $worker
 }
+
+proc next_second { worker } {
+	dict incr worker working_for -1
+	if { [dict get $worker working_for] == 0} {
+		dict set worker done true
+	} 
+	return $worker
+}
 #-----------------
 
 set puzzle_input [parse_input [load_input "input.txt"]]
@@ -138,5 +146,6 @@ set my_worker [prepare_worker 1]
 set my_worker [set_task $my_worker "D"]
 puts [expr [dict get $my_worker working_for] > 0]
 
-
+puts [next_second $my_worker]
+puts [next_second [next_second $my_worker]]
 
