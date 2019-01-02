@@ -80,7 +80,8 @@ proc set_task { worker task} {
 }
 
 proc next_second { worker } {
-	dict incr worker working_for -1
+	dict incr $worker working_for -1
+	puts [dict get $worker working_for]
 	if { [dict get $worker working_for] == 0} {
 		dict set worker done true
 	} 
@@ -134,18 +135,52 @@ foreach element [dict keys $successors] {
 		queue_push $element
 	}
 }
-puts [queue_size]
 
 set workers [list]
 
 for {set x 0 } { $x < 5} { incr x} {
 	lappend workers [prepare_worker $x]
 }
-puts $workers
-set my_worker [prepare_worker 1]
-set my_worker [set_task $my_worker "D"]
-puts [expr [dict get $my_worker working_for] > 0]
 
-puts [next_second $my_worker]
-puts [next_second [next_second $my_worker]]
+set seconds 0
 
+while {[llength $part_2] != 26} {
+
+	set available_workers [list]
+	foreach worker $workers {
+		if {![expr [dict get $worker working_for] > 0] } {
+			lappend available_workers $worker
+		}
+	}
+	foreach worker $available_workers {
+			if {[queue_size]} {
+				set next_item [queue_pop]
+				set new_worker [set_task $worker $next_item]  
+				set workers [lreplace $workers [dict get $worker id] [dict get $worker id] $new_worker]
+			  puts $workers
+		}
+	}
+	foreach worker $workers {
+		set new_worker [next_second $worker]
+		puts $new_worker
+		puts "second $seconds"
+		if { [dict get $new_worker done] } {
+			puts "worker is done"
+			set task [dict get $new_worker task]
+			lappend part_2 $task
+			if {![has_successors $task]} {
+				break
+			}
+			foreach successor [successors_for $task] {
+				if {!($successor in $part_2) && [all_in [predecessors_for $successor] $part_2]} {
+					queue_push $successor
+				}
+			}
+		set new_worker [dict set new_worker done false]
+		set workers [lreplace $workers [dict get $worker id] [dict get $worker id] $new_worker]
+		}
+	}
+	incr seconds
+	#break
+}
+puts $seconds

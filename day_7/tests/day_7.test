@@ -27,5 +27,15 @@ test all_in_when_list_in {
 	all_in [list a] [list a b]
 } -result true
 
+test when_worker_finishes_done_is_set_to_true {
+	true when worker is finished
+} -body {
+	set worker [prepare_worker 1]
+	set worker [set_task $worker A]
+	set worker [dict set worker working_for 1]
+	set result [next_second $worker]
+	dict get $result done
+} -result true
+
 
 cleanupTests
