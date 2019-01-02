@@ -66,7 +66,7 @@ proc destroy_queue {} {
 }
 
 proc prepare_worker { name } {
-	return [dict create id $name working_for 0 task {} done false]
+	return [dict create id $name working_for -1 task {} done false]
 }
 
 proc is_busy { worker } {
@@ -76,12 +76,12 @@ proc is_busy { worker } {
 proc set_task { worker task} {
 	dict set worker task $task
 	dict set worker working_for [expr [scan $task "%c"] + 60 - 65]
+	dict set worker done false
 	return $worker
 }
 
 proc next_second { worker } {
-	dict incr $worker working_for -1
-	puts [dict get $worker working_for]
+	dict incr worker working_for -1
 	if { [dict get $worker working_for] == 0} {
 		dict set worker done true
 	} 
@@ -144,43 +144,42 @@ for {set x 0 } { $x < 5} { incr x} {
 
 set seconds 0
 
-while {[llength $part_2] != 26} {
+# while {[llength $part_2] != 26} {
 
-	set available_workers [list]
-	foreach worker $workers {
-		if {![expr [dict get $worker working_for] > 0] } {
-			lappend available_workers $worker
-		}
-	}
-	foreach worker $available_workers {
-			if {[queue_size]} {
-				set next_item [queue_pop]
-				set new_worker [set_task $worker $next_item]  
-				set workers [lreplace $workers [dict get $worker id] [dict get $worker id] $new_worker]
-			  puts $workers
-		}
-	}
-	foreach worker $workers {
-		set new_worker [next_second $worker]
-		puts $new_worker
-		puts "second $seconds"
-		if { [dict get $new_worker done] } {
-			puts "worker is done"
-			set task [dict get $new_worker task]
-			lappend part_2 $task
-			if {![has_successors $task]} {
-				break
-			}
-			foreach successor [successors_for $task] {
-				if {!($successor in $part_2) && [all_in [predecessors_for $successor] $part_2]} {
-					queue_push $successor
-				}
-			}
-		set new_worker [dict set new_worker done false]
-		set workers [lreplace $workers [dict get $worker id] [dict get $worker id] $new_worker]
-		}
-	}
-	incr seconds
-	#break
-}
+# 	set available_workers [list]
+# 	foreach worker $workers {
+# 		if {![expr [dict get $worker working_for] > 0] } {
+# 			lappend available_workers $worker
+# 		}
+# 	}
+# 	foreach worker $available_workers {
+# 			if {[queue_size]} {
+# 				set next_item [queue_pop]
+# 				set new_worker [set_task $worker $next_item]  
+# 				set workers [lreplace $workers [dict get $worker id] [dict get $worker id] $new_worker]
+# 			  puts $workers
+# 		}
+# 	}
+# 	foreach worker $workers {
+# 		set new_worker [next_second $worker]
+# 		puts "second $seconds, worker : $new_worker"
+# 		if { [dict get $new_worker done] } {
+# 			puts "worker is done"
+# 			set task [dict get $new_worker task]
+# 			lappend part_2 $task
+# 			if {![has_successors $task]} {
+# 				break
+# 			}
+# 			foreach successor [successors_for $task] {
+# 				if {!($successor in $part_2) && [all_in [predecessors_for $successor] $part_2]} {
+# 					queue_push $successor
+# 				}
+# 			}
+# 		set new_worker [dict set new_worker done false]
+# 		set workers [lreplace $workers [dict get $worker id] [dict get $worker id] $new_worker]
+# 		}
+# 	}
+# 	incr seconds
+# 	#break
+# }
 puts $seconds

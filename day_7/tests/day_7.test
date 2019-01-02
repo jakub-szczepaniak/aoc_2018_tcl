@@ -30,12 +30,18 @@ test all_in_when_list_in {
 test when_worker_finishes_done_is_set_to_true {
 	true when worker is finished
 } -body {
-	set worker [prepare_worker 1]
-	set worker [set_task $worker A]
-	set worker [dict set worker working_for 1]
+	set worker [dict create working_for 1 done false task A id 1]
 	set result [next_second $worker]
 	dict get $result done
 } -result true
+
+test when_worker_not_finished_done_is_false {
+	false when not done
+} -body {
+	set worker [dict create working_for 2 done false task A id 1]
+	set result [next_second $worker]
+	dict get $result working_for
+} -result 1
 
 
 cleanupTests
