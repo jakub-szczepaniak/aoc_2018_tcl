@@ -87,6 +87,14 @@ proc next_second { worker } {
 	} 
 	return $worker
 }
+
+proc push_independent_tasks { pred succ } {
+	foreach element [dict keys $succ] {
+		if { [not_in [dict keys $pred] $element ]} {
+			queue_push $element
+		}
+	}	
+}
 #-----------------
 
 set puzzle_input [parse_input [load_input "input.txt"]]
@@ -103,11 +111,7 @@ foreach step $puzzle_input {
 
 prepare_queue
 
-foreach element [dict keys $successors] {
-	if { [not_in [dict keys $predecessors] $element ]} {
-		queue_push $element
-	}
-}
+push_independent_tasks $predecessors $successors
 
 set finished [list]
 
@@ -130,11 +134,7 @@ reset_queue
 
 set part_2 [list]
 
-foreach element [dict keys $successors] {
-	if { [not_in [dict keys $predecessors] $element ]} {
-		queue_push $element
-	}
-}
+push_independent_tasks $predecessors $successors
 
 set workers [list]
 
