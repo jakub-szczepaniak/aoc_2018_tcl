@@ -169,34 +169,26 @@ set seconds 0
 
 while {[llength $part_2] != 26} {
 	set available_workers [get_available_workers $workers]
-	puts "second : $seconds"
-	puts "all workers : $workers"
-	puts "available workers $available_workers"
 	foreach worker $available_workers {
 			if {[queue_size]} {
 				set next_item [queue_pop]
-				puts "adding task: $next_item"
 				set new_worker [set_task $worker $next_item]
 				set workers [lreplace $workers [dict get $worker id] [dict get $worker id] $new_worker]
 		}
 	}
 	
 	set active_workers [get_active_workers $workers]
-	puts "active workers : $active_workers"
 	
 	foreach worker $active_workers {
 		set updated_worker [next_second $worker]
 		if { [dict get $updated_worker working_for] == 0 } {
-			puts "worker $updated_worker is done"
 			set task [dict get $updated_worker task]
 			lappend part_2 $task
 			if {![has_successors $task]} {
 				break
 			}
 			foreach successor [successors_for $task] {
-				puts "successor $successor for $task"
 				if {!($successor in $part_2) && [all_in [predecessors_for $successor] $part_2]} {
-					puts "Pushing $successor"
 					queue_push $successor
 				}
 			}
@@ -205,5 +197,5 @@ while {[llength $part_2] != 26} {
 	}
 	incr seconds
 }
-puts $seconds
-puts $part_2
+puts "Part 2 answer : $seconds"
+puts "Part 2 order: [join $part_2 {}]"
