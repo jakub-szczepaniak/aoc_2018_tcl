@@ -1,7 +1,24 @@
 package require tcltest
+package require struct
 namespace import ::tcltest::*
 
 source "day_8.tcl"
 
+variable SETUP { ::struct::stack processing }
+variable CLEANUP { processing destroy}
+
+test single_node_no_child_no_meta {
+	for 0 0 stack is empty
+} -setup $SETUP -cleanup $CLEANUP -body {
+	process_data [list 0 0]
+	set result [processing size]
+} -result 0
+
+test single_node_no_child_one_meta {
+	for 0 1 9 stack contains 9
+} -setup $SETUP -cleanup $CLEANUP -body {
+	process_data [list 0 1 9]
+	set result [processing peek]
+} -result 9
 
 cleanupTests
