@@ -23,12 +23,11 @@ proc fill_in_0 { dictionary } {
 	return $dictionary
 }
 
-set puzzle [load_input "input.txt"]
-#set puzzle [load_input "test.txt"]
+set puzzle [load_input "[file dirname [info script]]/input.txt"]
 set parsed [parse_input $puzzle]
 
 set sorted [lsort $parsed]
-save_output "sorted.txt" $sorted
+save_output "[file dirname [info script]]/sorted.txt" $sorted
 
 set time_by_guard [dict create]
 set minutes [dict create]

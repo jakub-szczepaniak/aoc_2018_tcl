@@ -27,7 +27,7 @@ proc list_covered { claim } {
 	set result
 }
 
-set input [load_input "input.txt"]
+set input [load_input "[file dirname [info script]]/input.txt"]
 
 set lines [parse_input $input]
 

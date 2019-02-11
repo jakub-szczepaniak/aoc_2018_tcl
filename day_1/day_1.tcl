@@ -1,6 +1,6 @@
 source [file join [file dirname [info script]] ../utils utils.tcl]
 
-set puzzle [load_input "input.txt"]
+set puzzle [load_input "[file dirname [info script]]/input.txt"]
 
 # part one
 set parsed [parse_input $puzzle]

@@ -124,7 +124,7 @@ proc get_active_workers { workers } {
 }
 #-----------------
 
-set puzzle_input [parse_input [load_input "input.txt"]]
+set puzzle_input [parse_input [load_input "[file dirname [info script]]/input.txt"]]
 
 set successors [dict create]
 

@@ -1,0 +1,48 @@
+day 2:
+  ✔ find the reason why the tests do not run @done (18-12-11 15:27)
+    you need to put 'cleanupTests' command to collect results from test file execution
+  ✔ write test for triple @done (18-12-11 15:34)
+  ✔ write method for triple @done (18-12-11 20:26)
+ day 3:
+   ✔ create working test structure @done (18-12-11 20:55)
+   ✔ parse input @done (18-12-12 00:18)
+     format is #1 @ 1,3: 4x4 
+     #id @ x,y: WxH
+   ✔ how to extract matches with one regex @done (18-12-12 00:18)
+     regexp regex_string subject_string ?full_match? ?group1? ... ?groupx?
+   ✔ research what algorithm to use @done (18-12-13 13:05)
+     for each claim, collect list of fields claim covers
+     for each claim, and each field it covers, add field coordinates to the dict coordinates -> [claim_id] if the entry does not exist. 
+     otherwise append the claim id to the end of the list
+     count entries in the coordinates dict, where list of claims is >= 1
+     ✔ when parsing input into claims, calculate list of fields covered in format x:y and add to the claim dictionary @done (18-12-13 13:40)
+     ✔ what is the ID of the only claim that does not overlap? @done (18-12-13 21:37)
+ day 4:
+   ✔ create working test structure @done (18-12-13 21:52)
+   ✔ parse input @done (18-12-14 21:00)
+     ✔ sort input chronologically @done (18-12-14 21:00)
+    ✔ verify if the guard 1229, 2311 and 1289 didnt fall asleep nor woke up @done (18-12-14 21:05)
+      we have dictionary, with keys being guard id, and values being the list of actions (in chronological order), actions are also a list - 0 - fall asleep, 1 - woke up, second element is the minute from the log book.
+      ✔ my answer is not correct @done (18-12-19 23:16)
+      ✔ add tests to verify sample input/output @done (18-12-19 23:16)
+ day 5:
+   ✔ create working test structure @done (18-12-20 20:22)
+   ✔ parse input @done (18-12-21 21:25)
+
+day 6:
+  ✔ create working test structure @done (18-12-21 21:33)
+  ✔ parse input @done (18-12-22 21:53)
+  ☐ run through coordinates only once to calculate both parts
+day 7:
+  ✔ create working test structure @done (18-12-22 22:26)
+  ✔ parse input @done (18-12-30 08:10)
+  ✔ add tests for workers procedures @done (19-01-04 23:56)
+
+day 8:
+  ✔ create working test structure @done (19-01-05 23:04)
+  ✔ parse input @done (19-01-05 23:17)
+  ☐ choose algorithm
+
+
+   ☐ evaluate if any methods can be reused
+   ☐ refactor methods moved to 'utilities'

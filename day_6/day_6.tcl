@@ -37,7 +37,7 @@ set puzzle_input {1, 1
 5, 5
 8, 9}
 
-set puzzle_input [load_input "input.txt"]
+set puzzle_input [load_input "[file dirname [info script]]/input.txt"]
 set coordinates [parse_coordinates $puzzle_input]
 
 set min_max [min_max_coordinates $coordinates]

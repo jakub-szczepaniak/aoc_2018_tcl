@@ -1,7 +1,7 @@
 package require tcltest
 namespace import ::tcltest::*
 
-source "day_3.tcl"
+source "[file dirname [info script]]/../day_3.tcl"
 
 test getting_single_claim {
 	single claim is converted to dictionary

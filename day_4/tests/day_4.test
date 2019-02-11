@@ -1,7 +1,7 @@
 package require tcltest
 namespace import ::tcltest::*
 
-source "day_4.tcl"
+source "[file dirname [info script]]/../day_4.tcl"
 
 test parsing_input_for_guard_id {
   extract guard id from line

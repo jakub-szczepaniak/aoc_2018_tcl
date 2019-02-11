@@ -27,7 +27,7 @@ proc resolve_reaction { elements } {
 	return $result
 }
 
-set puzzle_input [load_input "input.txt"]
+set puzzle_input [load_input "[file dirname [info script]]/input.txt"]
 
 set as_list [split $puzzle_input ""]
 

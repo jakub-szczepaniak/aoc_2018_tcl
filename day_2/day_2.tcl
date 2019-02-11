@@ -47,7 +47,7 @@ proc string_to_list { input } {
 	return [split $input ""]
 }
 
- proc levenhstein { input1 input2 } {
+proc levenhstein { input1 input2 } {
  	set distance 0
  	set count 0
  	set list1 [string_to_list $input1]
@@ -62,7 +62,7 @@ proc string_to_list { input } {
  		incr count
  	}
  	return $distance
- }
+}
 
 proc strip_difference { input1 input2} {
 	set list1 [string_to_list $input1]
@@ -79,7 +79,7 @@ proc strip_difference { input1 input2} {
 }
 
 
-set puzzle [load_input "input.txt"]
+set puzzle [load_input "[file dirname [info script]]/input.txt"]
 
 set parsed [parse_input $puzzle]
 

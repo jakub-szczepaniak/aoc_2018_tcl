@@ -1,7 +1,8 @@
 package require tcltest
 namespace import ::tcltest::*
 
-source "day_1.tcl"
+source "[file dirname [info script]]/../day_1.tcl"
+
 test parse_input_one_element {
 	Test: +1 == [+1]
 } -body {
