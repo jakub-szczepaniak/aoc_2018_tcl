@@ -41,6 +41,22 @@ proc part1 {} {
 	return $meta_sum
 }
 
+proc part2 {node value} {
+	if {[llength $::nodes($node)] == 0} {
+		incr value [expr [join $::metadata($node) +]]
+	} else {
+		foreach meta $::metadata($node) {
+			incr meta -1
+			set n [lindex  $::nodes($node) $meta]
+			if {$n ne ""} {
+				set value [part2 $n $value]
+			}
+
+		}
+	}
+	return $value
+}
+
 set puzzle_input [prepare_input]
 set nodenum 0
 lassign [read_node $puzzle_input] _ rest
@@ -50,3 +66,4 @@ if {[llength $rest] > 0} {
 }
 
 puts "Part 1: [part1]"
+puts "Part 2: [part2 1 0]"
