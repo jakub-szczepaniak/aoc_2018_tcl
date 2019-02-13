@@ -1,28 +1,52 @@
 source [file join [file dirname [info script]] ../utils utils.tcl]
-package require struct
 
 proc prepare_input {} {
 	set puzzle_input [split [load_input "[file dirname [info script]]/input.txt"] " "]
 	set parsed [flatten $puzzle_input]
 }
 
-::struct::stack processing
-
-proc process_data { data } {
-	set data [lassign $data child_count meta_count]
-	if { $child_count==0} {
-		for { set x 0} { $x < $meta_count} { incr x} {
-			processing push [lindex $data $x]	
-		} 
+proc read_node { data } {
+	set this_node ""
+	if { [llength $data]} {
+		set this_node [incr ::nodenum]
+		puts "current node : $this_node"
+		set data [lassign $data children_count meta_count]
+		set ::nodes($this_node) [list]
+		while {$children_count} {
+			puts "$this_node has $children_count children"
+			incr children_count -1
+			lassign [read_node $data] n data
+			lappend ::nodes($this_node) $n
+		}
+		set ::metadata($this_node) [list 0]
+		while {$meta_count} {
+			puts "$this_node has $meta_count metadata"
+			lappend ::metadata($this_node) [lindex $data 0]
+			puts "Collected values for $this_node: [array get ::metadata $this_node]"
+			set data [lrange $data 1 end]
+			incr meta_count -1
+		}
 	} else {
-		process_data $data
+		error "read_node called with empty data"
 	}
+	puts "finished parsing $this_node"
+	return [list $this_node $data]
 }
 
- set puzzle_input [prepare_input]
- set puzzle_input [list 2 3 0 3 10 11 12 1 1 0 1 99 2 1 1 2]
+proc part1 {} {
+	set meta_sum 0
+	foreach {n md} [array get ::metadata] {
+		incr meta_sum [expr [join $md +]]
+	}
+	return $meta_sum
+}
 
- process_data $puzzle_input
- puts $puzzle_input
- puts [processing peek [processing size]]
-processing destroy
+set puzzle_input [prepare_input]
+set nodenum 0
+lassign [read_node $puzzle_input] _ rest
+
+if {[llength $rest] > 0} {
+	error "not all data read"
+}
+
+puts "Part 1: [part1]"
