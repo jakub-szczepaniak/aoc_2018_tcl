@@ -3,5 +3,12 @@ namespace import ::tcltest::*
 
 source "[file dirname [info script]]/../day_9.tcl"
 
+test initializing_the_game {
+	when game is initialized, the result is a list with 2 elements, 
+	0 - first marble
+	0 - index of the current marble.
+} -body {
+	init_game
+} -result [list 0 0]
 
 cleanupTests
