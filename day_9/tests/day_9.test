@@ -11,4 +11,12 @@ test initializing_the_game {
 	init_game
 } -result [list 0 0]
 
+test add_first_marble {
+	when player adds a marble, it is inserted between 1 and 2 marble forward from current marble on the field.
+		current marble is set to the index of the marble added.
+} -body {
+	set field [init_game]
+	add_marble $field 1
+} -result [list 0 1 1]
+
 cleanupTests
